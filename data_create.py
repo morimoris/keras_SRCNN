@@ -33,7 +33,7 @@ def save_frame(path,        #データが入っているファイルのパス
         
             cut_img = img[ram_h : ram_h + cut_height, ram_w: ram_w + cut_width]
             
-            #がウシアンフィルタでぼかしを入れる
+            #ガウシアンフィルタでぼかしを入れる
             img1 = cv2.GaussianBlur(cut_img, (5, 5), 0)
 
             high_data_list.append(cut_img)
