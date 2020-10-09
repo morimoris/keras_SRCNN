@@ -34,7 +34,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     if args.mode == "srcnn":
-        train_x, train_y = data_create.save_frame(train_file_path,   #切り取る動画のpath
+        train_x, train_y = data_create.save_frame(train_file_path,   #切り取る画像が入ったpath
                                                 cut_traindata_num,  #データセットの生成数
                                                 train_height, #保存サイズ
                                                 train_width,
@@ -58,7 +58,7 @@ if __name__ == "__main__":
 
         new_model.summary()
 
-        test_x, test_y = data_create.save_frame(test_file_path,   #切り取る動画のpath
+        test_x, test_y = data_create.save_frame(test_file_path,   #切り取る画像が入ったpath
                                                 cut_testdata_num,  #データセットの生成数
                                                 test_height, #保存サイズ
                                                 test_width,
