@@ -30,14 +30,15 @@ def save_frame(path,        #データが入っているファイルのパス
         for q in range(data_number):
             ram_h = random.randint(0, H - cut_height)
             ram_w = random.randint(0, W - cut_width)
-        
+          
             cut_img = img[ram_h : ram_h + cut_height, ram_w: ram_w + cut_width]
             
             #ガウシアンフィルタでぼかしを入れる
-            img1 = cv2.GaussianBlur(cut_img, (5, 5), 0)
-
+            img1 = cv2.GaussianBlur(img, (5, 5), 0)
+            img2 = img1[ram_h : ram_h + cut_height, ram_w: ram_w + cut_width]
+            
             high_data_list.append(cut_img)
-            low_data_list.append(img1)
+            low_data_list.append(img2)
     
     #numpy → tensor　+ 正規化
     low_data_list = tf.convert_to_tensor(low_data_list, np.float32)
