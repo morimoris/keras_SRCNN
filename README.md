@@ -9,7 +9,7 @@ I created Super Resolution with Convolutional Neural networks(SRCNN) using pytho
 - GPU : NVIDIA GeForce RTX 2060 SUPER
 
 ### How to use
-1. Create new folders which are `./train_data` and `./test_data'
+1. Create new folders which are `./train_data` and `./test_data`
    Storage train data in `./train_data` and test data in `./test_data`
 2. Learning
 ```
