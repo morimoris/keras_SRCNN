@@ -21,3 +21,4 @@ main.py --mode srcnn
 main.py --mode evaluate
 ```
 ### Result example
+![High Image](result_srcnn_model/high_0.jpg)
