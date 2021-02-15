@@ -65,7 +65,7 @@ if __name__ == "__main__":
                                                 mag)   #倍率
 
         pred = new_model.predict(test_x)
-        path = "resurt_" + path
+        path = "result"
         os.makedirs(path, exist_ok = True)
         path = path + "/"
 
