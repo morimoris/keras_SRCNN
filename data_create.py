@@ -1,50 +1,56 @@
 import cv2
-import os
 import random
 import glob
-import numpy as np
-import tensorflow as tf
 
 #任意のフレーム数を切り出すプログラム
-def save_frame(path,        #データが入っているファイルのパス
-               data_number, #1枚の画像から切り取る写真の数
-               cut_height,  #保存サイズ(縦)
-               cut_width,   #保存サイズ(横)
-               mag,         #縮小倍率
-               ext='jpg'):
+class datacreate:
+    def __init__(self):
+        self.num = 0
+        self.mag = 2
 
-    #データセットのリストを生成
-    low_data_list = []
-    high_data_list = []
+#任意のフレーム数を切り出すプログラム
+    def datacreate(self,
+                img_path,     #切り取る動画が入ったファイルのpath
+                data_number,  #データセットの生成数
+                cut_frame,    #1枚の画像から生成するデータセットの数
+                HR_height,    #HRの保存サイズ
+                HR_width):
 
-    path = path + "/*"
-    files = glob.glob(path)
-    
-    for img in files:
-        img = cv2.imread(img, cv2.IMREAD_GRAYSCALE)
-        H, W = img.shape
+        LR_height = HR_height #低解像度画像のsize = 高解像度のsize
+        LR_width = HR_width 
 
-        if cut_height > H or cut_width > W:
-            return
+        low_data_list = []    #生成したデータを格納するListの作成
+        high_data_list = []
 
-        for q in range(data_number):
-            ram_h = random.randint(0, H - cut_height)
-            ram_w = random.randint(0, W - cut_width)
-          
-            cut_img = img[ram_h : ram_h + cut_height, ram_w: ram_w + cut_width]
-            
-            #ガウシアンフィルタでぼかしを入れる
-            img1 = cv2.GaussianBlur(img, (5, 5), 0)
-            img2 = img1[ram_h : ram_h + cut_height, ram_w: ram_w + cut_width]
-            
-            high_data_list.append(cut_img)
-            low_data_list.append(img2)
-    
-    #numpy → tensor　+ 正規化
-    low_data_list = tf.convert_to_tensor(low_data_list, np.float32)
-    high_data_list = tf.convert_to_tensor(high_data_list, np.float32)
-    low_data_list /= 255
-    high_data_list /= 255
+        path = img_path + "/*"
+        files = glob.glob(path)
 
-    return low_data_list, high_data_list
+        while self.num < data_number:
+            photo_num = random.randint(0, len(files) - 1)
+            img = cv2.imread(files[photo_num])
+            height, width = img.shape[:2]
 
+            if HR_height > height or HR_width > width:
+                break
+                
+            color_img = cv2.cvtColor(img, cv2.COLOR_BGR2YCrCb)
+            gray = color_img[:, :, 0]      
+            bicubic_img = cv2.resize(gray , (int(width // self.mag), int(height // self.mag)), interpolation=cv2.INTER_CUBIC)
+            bicubic_img = cv2.resize(bicubic_img , (int(width), int(height)), interpolation=cv2.INTER_CUBIC)
+
+            for i in range(cut_frame):
+                ram_h = random.randint(0, height - LR_height)
+                ram_w = random.randint(0, width - LR_width)
+
+                LR_img = bicubic_img[ram_h : ram_h + LR_height, ram_w: ram_w + LR_width]
+                high_img = gray[ram_h : ram_h + HR_height, ram_w: ram_w + HR_width]
+
+                low_data_list.append(LR_img)
+                high_data_list.append(high_img)
+
+                self.num += 1
+
+                if self.num == data_number:
+                    break
+
+        return low_data_list, high_data_list
