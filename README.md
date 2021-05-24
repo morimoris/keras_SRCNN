@@ -6,7 +6,7 @@ https://qiita.com/morimoris/items/b5d4966ce7c02b97ac98
 
 - PC environment
   - `CPU` : AMD Ryzen 5 3500 6-Core Processor
-  - `メモリ数` : 40GB
+  - `Memory size` : 40GB
   - `GPU` : NVIDIA GeForce RTX 2060 SUPER
   - `OS` : Windows 10
   
